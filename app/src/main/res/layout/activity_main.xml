@@ -161,7 +161,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView2"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
@@ -169,12 +169,13 @@
             app:cardElevation="5dp"
             android:outlineSpotShadowColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date3" >
+            app:layout_constraintTop_toBottomOf="@+id/tv_date3">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_bg_1">
+
                 <ImageView
                     android:id="@+id/iv_icon3"
                     android:layout_width="50dp"
@@ -203,8 +204,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textStyle="bold"
                     android:textColor="@color/black_text"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_icon3"
@@ -215,7 +216,7 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardView"
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -259,8 +260,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textStyle="bold"
                     android:textColor="@color/black_text"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_icon1"
@@ -269,7 +270,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_marginTop="16dp"
             app:cardCornerRadius="16dp"
@@ -283,6 +284,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_bg_1">
+
                 <ImageView
                     android:id="@+id/iv_icon2"
                     android:layout_width="50dp"
@@ -311,8 +313,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:textStyle="bold"
                     android:textColor="@color/black_text"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/iv_icon2"
