@@ -1,5 +1,6 @@
 package com.example.myweatherapp.network
 
+import com.example.myweatherapp.model.OneCallEntity
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,5 +13,5 @@ interface WeatherService {
         @Query("lon") lon: String,
         @Query("units") units: String?,
         @Query("lang") lang: String?,
-        @Query("appid") appid: String): WeatherEntity
+        @Query("appid") appid: String): OneCallEntity
 }

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">MyWeatherApp</string>
+    <string name="no_location_detected">
+        No se puede acceder a la ubicación. Asegurate que el servicio de ubicación está activado en tu dispositivo
+    </string>
+    <string name="permission_denied_explanation">
+        El permiso fue negado, pero es indispensable para usar el app
+    </string>
+    <string name="permission_rationale">
+        El permiso de ubicación es indispensable para usar el app.
+    </string>
+    <string name="settings">Ajustes</string>
+    <string name="appName">MyWeatherApp</string>
 </resources>

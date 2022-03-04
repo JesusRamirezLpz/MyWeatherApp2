@@ -7,20 +7,14 @@
     android:background="@drawable/gradient_bg_2"
     tools:context=".views.MainActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/detailsConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible"
         tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="20dp">
+        tools:layout_editor_absoluteY="20dp"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/iv_location"
@@ -103,40 +97,16 @@
             tools:text="24º" />
 
         <TextView
-            android:id="@+id/tv_date1"
+            android:id="@+id/tv_date"
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5"
-            tools:text="Hoy, 2 Marzo" />
-
-        <TextView
-            android:id="@+id/tv_date2"
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toStartOf="@+id/tv_date3"
-            app:layout_constraintStart_toEndOf="@+id/tv_date1"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5"
-            tools:text="Mier, 3 Marzo" />
-
-        <TextView
-            android:id="@+id/tv_date3"
-            style="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="32dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView5"
-            tools:text="Juev, 4 Marzo" />
+            tools:text="Hoy, Martes 2 Marzo 2022" />
 
         <TextView
             android:id="@+id/tv_wind"
@@ -145,8 +115,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textColor="@color/white"
             android:text="10 km/h"
+            android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
             app:layout_constraintTop_toBottomOf="@+id/tv_temp" />
 
@@ -167,17 +137,17 @@
             android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
+            android:outlineSpotShadowColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
-            android:outlineSpotShadowColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date3">
+            app:layout_constraintTop_toBottomOf="@+id/tv_date">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_bg_1">
+                android:background="@color/teal_700">
 
                 <ImageView
                     android:id="@+id/iv_icon3"
@@ -222,18 +192,18 @@
             android:layout_width="110dp"
             android:layout_height="150dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="5dp"
             android:outlineAmbientShadowColor="@color/white"
             android:outlineSpotShadowColor="@color/white"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date1">
+            app:layout_constraintTop_toBottomOf="@+id/tv_date">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_bg_1">
+                android:background="@color/teal_700">
 
                 <ImageView
                     android:id="@+id/iv_icon1"
@@ -275,18 +245,18 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="110dp"
             android:layout_height="150dp"
-            android:layout_marginTop="16dp"
+            android:outlineSpotShadowColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
-            android:outlineSpotShadowColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/cardView2"
             app:layout_constraintStart_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date2">
+            app:layout_constraintTop_toBottomOf="@+id/tv_date">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/gradient_bg_1">
+                android:background="@color/teal_700">
 
                 <ImageView
                     android:id="@+id/iv_icon2"
@@ -326,6 +296,17 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <ProgressBar
+            android:id="@+id/progressBarIndicator"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:indeterminateTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
