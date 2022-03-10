@@ -7,13 +7,25 @@
     android:background="@drawable/gradient_bg_2"
     tools:context=".views.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progressBarIndicator"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/white"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/detailsConstraintLayout"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detailsConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible"
-        tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="20dp"
+        tools:layout_editor_absoluteX="-206dp"
+        tools:layout_editor_absoluteY="54dp"
         tools:visibility="visible">
 
         <ImageView
@@ -29,32 +41,33 @@
 
         <ImageView
             android:id="@+id/iv_icon"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cityCountry"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/iv_wind_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="@+id/tv_temp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_wind"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
             app:srcCompat="@drawable/wind"
             app:tint="@color/white" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/iv_humidity_icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/tv_wind"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_humidity"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
             app:srcCompat="@drawable/humidity"
             app:tint="@color/white" />
 
@@ -73,27 +86,25 @@
 
         <TextView
             android:id="@+id/tv_description"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
             tools:text="Cielo despejado" />
 
         <TextView
             android:id="@+id/tv_temp"
-            style="@style/TextAppearance.MaterialComponents.Headline1"
+            style="@style/TextAppearance.MaterialComponents.Headline2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="8dp"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_description"
+            app:layout_constraintStart_toEndOf="@+id/iv_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_date"
             tools:text="24º" />
 
         <TextView
@@ -101,11 +112,11 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/iv_location"
             tools:text="Hoy, Martes 2 Marzo 2022" />
 
         <TextView
@@ -113,36 +124,34 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             android:text="10 km/h"
             android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temp" />
+            app:layout_constraintEnd_toStartOf="@+id/iv_humidity_icon"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <TextView
             android:id="@+id/tv_humidity"
             style="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:text="28 %"
             android:textColor="@color/white"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/tv_temp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_humidity_icon" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView2"
+            android:id="@+id/cv_hora3"
             android:layout_width="110dp"
             android:layout_height="150dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="24dp"
             android:outlineSpotShadowColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date">
+            app:layout_constraintTop_toTopOf="@+id/cv_hora1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -188,17 +197,17 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
+            android:id="@+id/cv_hora1"
             android:layout_width="110dp"
             android:layout_height="150dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:outlineAmbientShadowColor="@color/white"
             android:outlineSpotShadowColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date">
+            app:layout_constraintTop_toBottomOf="@+id/iv_icon">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -243,15 +252,15 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_hora2"
             android:layout_width="110dp"
             android:layout_height="150dp"
             android:outlineSpotShadowColor="@color/white"
             app:cardCornerRadius="16dp"
             app:cardElevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/cardView2"
-            app:layout_constraintStart_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/tv_date">
+            app:layout_constraintEnd_toStartOf="@+id/cv_hora3"
+            app:layout_constraintStart_toEndOf="@+id/cv_hora1"
+            app:layout_constraintTop_toTopOf="@+id/cv_hora1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -296,17 +305,26 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <ProgressBar
-            android:id="@+id/progressBarIndicator"
-            style="?android:attr/progressBarStyle"
+        <TextView
+            android:id="@+id/tv_proximos_dias"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:indeterminateTint="@color/white"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Próximos días"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cv_hora1" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_clima_semanal"
+            android:layout_width="409dp"
+            android:layout_height="376dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_proximos_dias" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

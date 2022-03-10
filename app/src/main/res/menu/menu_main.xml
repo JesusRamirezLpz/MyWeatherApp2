@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/update"
-        android:icon="@drawable/ic_baseline_notification"
-        android:title="Actualizar"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        android:title="@string/actualizar"
         app:showAsAction="ifRoom" />
 </menu>

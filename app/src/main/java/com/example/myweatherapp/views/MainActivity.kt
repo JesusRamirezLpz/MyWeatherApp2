@@ -15,16 +15,20 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Adapter
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.myweatherapp.BuildConfig.APPLICATION_ID
 import com.example.myweatherapp.R
+import com.example.myweatherapp.databinding.ActivityClimaDiarioBinding
 import com.example.myweatherapp.databinding.ActivityMainBinding
 import com.example.myweatherapp.model.OneCallEntity
 import com.example.myweatherapp.network.WeatherService
@@ -49,30 +53,45 @@ class MainActivity : AppCompatActivity() {
     private var longitude = ""
     private var cityname:String =""
     private var country:String =""
+    var adaptador: WeatherAdapter? = null
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var _binding: ActivityClimaDiarioBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //installSplashScreen()
         initcomponets()
-        if(!checkPermissions()){
-            requestPermissions()
-        } else {
-            getLastLocation(){ location ->
-                setupViewDAta(location)
-            }
-        }
+        iniciarApp()
+    }
 
+   fun iniciarApp(){
+        if(checkForInternet(this)) {
+            if (!checkPermissions()) {
+                Log.e(TAG, "reque")
+                requestPermissions()
+            } else {
+                getLastLocation() { location ->
+                    Log.e(TAG, "Error JERL 2")
+                    setupViewDAta(location)
+                }
+            }
+        }else{
+            Log.e(TAG,"Error JERL 1")
+            showError("Sin acceso a Internet")
+            binding.detailsConstraintLayout.isVisible = false
+        }
     }
 
     private fun initcomponets() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        _binding = ActivityClimaDiarioBinding.inflate(layoutInflater)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
+
 
     private suspend fun getWeather(): OneCallEntity = withContext(Dispatchers.IO){
         showIndicator(true)
@@ -82,7 +101,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         val service: WeatherService = retrofit.create(WeatherService::class.java)
-        Log.e(TAG,"Latitude: $latitude Longitud: $longitude")
 
         service.getWeatherById(latitude,longitude,"metric", "sp",
             "8ae5c025c39ad55772a706d4c481cb8d")
@@ -95,9 +113,9 @@ class MainActivity : AppCompatActivity() {
                 longitude = location.longitude.toString()
                 formatResponse(getWeather())
                 binding.detailsConstraintLayout.isVisible = true
-                //binding.detailsContainer.isVisible = true
             }
         }else{
+            Log.e(TAG,"Error JERL 1")
             showError("Sin acceso a Internet")
             binding.detailsConstraintLayout.isVisible = false
         }
@@ -165,6 +183,7 @@ class MainActivity : AppCompatActivity() {
     private fun formatResponse(weatherEntity: OneCallEntity){
         showIndicator(true)
         try {
+            adaptador = WeatherAdapter(weatherEntity.daily, this)
             val icon = weatherEntity.current.weather[0].icon
             val iconUrl = "https://openweathermap.org/img/w/$icon.png"
             val status = weatherEntity.current.weather[0].description.uppercase()
@@ -209,13 +228,15 @@ class MainActivity : AppCompatActivity() {
                 ivIcon3.load(iconHourlyUrl3)
                 tvTemp3.text = tempHourly3
             }
-
+            Log.e("JERL",weatherEntity.daily.toString())
+            binding.recyclerClimaSemanal.layoutManager = LinearLayoutManager(this)
+            binding.recyclerClimaSemanal.adapter = adaptador
+            adaptador!!.notifyDataSetChanged()
             showIndicator(false)
 
         }catch(exception: Exception){
+            Log.e("JERL", exception.toString())
             showError("Ha ocurrido un error")
-            Log.e("JERL",exception.toString())
-            Log.e("Error format","Ha ocurrido un error")
             showIndicator(false)
         }
     }
@@ -256,13 +277,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main,menu)
+        if(checkForInternet(this)) {
+            val item = menu?.findItem(R.id.update)
+            item?.isVisible = false
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.update -> {
-                Toast.makeText(this,"Menú seleccionado", Toast.LENGTH_SHORT).show()
+                iniciarApp()
+                item.isVisible = false
+                Toast.makeText(this,"Refreshing...", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)

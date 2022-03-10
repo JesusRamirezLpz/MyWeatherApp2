@@ -11,4 +11,8 @@
     </string>
     <string name="settings">Ajustes</string>
     <string name="appName">MyWeatherApp</string>
+    <string name="actualizar">Actualizar</string>
+    <string name="semana">Semana</string>
+    <string name="esta_semana">Esta semana:</string>
+    <string name="regresar">Regresar</string>
 </resources>
