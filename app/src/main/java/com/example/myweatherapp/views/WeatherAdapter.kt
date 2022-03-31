@@ -16,6 +16,19 @@ import java.util.*
 
 class WeatherAdapter(val weather: List<Daily>, val activity: Activity): RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
 
+    fun diaSemanaEspanol(diaSemanaIngles:String):String{
+        var diaSemanaEspanol: String = ""
+        when(diaSemanaIngles){
+            "Mon" -> diaSemanaEspanol = "Lun"
+            "Tue" -> diaSemanaEspanol = "Mar"
+            "Wed" -> diaSemanaEspanol = "Mie"
+            "Thu" -> diaSemanaEspanol = "Jue"
+            "Fri" -> diaSemanaEspanol = "Vie"
+            "Sat" -> diaSemanaEspanol = "Sab"
+            "Sun" -> diaSemanaEspanol = "Dom"
+        }
+        return diaSemanaEspanol
+    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -30,17 +43,9 @@ class WeatherAdapter(val weather: List<Daily>, val activity: Activity): Recycler
         with(holder){
             val icon = weather.weather[0].icon
             val iconUrl = "https://openweathermap.org/img/w/$icon.png"
-            var res = SimpleDateFormat("E", Locale.forLanguageTag("es_MX")).format(weather.dt*1000)
-            when(res){
-                "Mon" -> res = "Lun"
-                "Tue" -> res = "Mar"
-                "Wed" -> res = "Mie"
-                "Thu" -> res = "Jue"
-                "Fri" -> res = "Vie"
-                "Sat" -> res = "Sab"
-                "Sun" -> res = "Dom"
-            }
-            tvDiaSemana.text = res
+            val diaSemanaIngles = SimpleDateFormat("E", Locale.forLanguageTag("es_MX")).format(weather.dt*1000)
+            val diaSemanaEspanol = diaSemanaEspanol(diaSemanaIngles)
+            tvDiaSemana.text = diaSemanaEspanol
             tvtempMax.text = "${weather.temp.max.toInt()}º/"
             tvtempMin.text = "${weather.temp.min.toInt()}º"
             tvDesc.text = "${weather.weather[0].description.uppercase()}"

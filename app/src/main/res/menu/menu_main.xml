@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_baseline_refresh_24"
         android:title="@string/actualizar"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/actualizar"
+        app:showAsAction="ifRoom" />
+
 </menu>

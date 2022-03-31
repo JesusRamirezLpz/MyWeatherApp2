@@ -15,33 +15,22 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Adapter
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.myweatherapp.BuildConfig.APPLICATION_ID
 import com.example.myweatherapp.R
-import com.example.myweatherapp.databinding.ActivityClimaDiarioBinding
 import com.example.myweatherapp.databinding.ActivityMainBinding
 import com.example.myweatherapp.model.OneCallEntity
-import com.example.myweatherapp.network.WeatherService
-import com.example.myweatherapp.util.checkForInternet
+import com.example.myweatherapp.util.Utils
+import com.example.myweatherapp.viewmodel.MainViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,76 +38,72 @@ class MainActivity : AppCompatActivity() {
 
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 34
     private val TAG = "MainActivityError"
-    private var latitude = ""
-    private var longitude = ""
     private var cityname:String =""
     private var country:String =""
     var adaptador: WeatherAdapter? = null
+    val utils: Utils = Utils()
+    val viewModel = MainViewModel()
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var _binding: ActivityClimaDiarioBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //installSplashScreen()
         initcomponets()
         iniciarApp()
     }
 
    fun iniciarApp(){
-        if(checkForInternet(this)) {
+        if(utils.checkForInternet(this)) {
             if (!checkPermissions()) {
-                Log.e(TAG, "reque")
                 requestPermissions()
             } else {
-                getLastLocation() { location ->
-                    Log.e(TAG, "Error JERL 2")
-                    setupViewDAta(location)
-                }
+                getWeather()
+                //getLastLocation() { location ->
+                    //setupViewDAta(location)
+                //}
             }
         }else{
-            Log.e(TAG,"Error JERL 1")
-            showError("Sin acceso a Internet")
+            utils.showMessage(this,R.string.sin_internet)
             binding.detailsConstraintLayout.isVisible = false
         }
+    }
+
+    private fun getWeather() {
+            try {
+                getLastLocation {  location ->
+                    sendData(location.latitude.toString(),location.longitude.toString())
+                }
+            }catch (e: IOException) {
+                utils.showMessage(this,R.string.ocurrio_error)
+                Log.e("Error", e.toString())
+            }
+    }
+
+    private fun sendData(lat: String, lon: String) {
+        viewModel.getWeatherById(
+            lat,
+            lon,
+            "metric",
+            "sp",
+            "8ae5c025c39ad55772a706d4c481cb8d")
     }
 
     private fun initcomponets() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        _binding = ActivityClimaDiarioBinding.inflate(layoutInflater)
+        observe()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
     }
 
-
-    private suspend fun getWeather(): OneCallEntity = withContext(Dispatchers.IO){
-        showIndicator(true)
-        val retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val service: WeatherService = retrofit.create(WeatherService::class.java)
-
-        service.getWeatherById(latitude,longitude,"metric", "sp",
-            "8ae5c025c39ad55772a706d4c481cb8d")
-    }
-
-    private fun setupViewDAta(location: Location){
-        if(checkForInternet(this)){
-            lifecycleScope.launch{
-                latitude = location.latitude.toString()
-                longitude = location.longitude.toString()
-                formatResponse(getWeather())
-                binding.detailsConstraintLayout.isVisible = true
-            }
-        }else{
-            Log.e(TAG,"Error JERL 1")
-            showError("Sin acceso a Internet")
-            binding.detailsConstraintLayout.isVisible = false
-        }
+    fun observe(){
+        viewModel.getWeather.observe(this, androidx.lifecycle.Observer { weather->
+            Log.e(TAG,weather.toString())
+            formatResponse(weather)
+            binding.detailsConstraintLayout.isVisible = true
+        })
     }
 
     @SuppressLint("MissingPermission")
@@ -129,16 +114,13 @@ class MainActivity : AppCompatActivity() {
                     val location = taskLocation.result
                     val lat = location.latitude
                     val lon = location.longitude
-                    var geocoder = Geocoder(this)
+                    val geocoder = Geocoder(this)
                     val address : MutableList<Address>?
-                    latitude = location?.latitude.toString()
-                    longitude = location?.longitude.toString()
                     address = geocoder.getFromLocation(lat,lon,1)
                     country = address.get(0).countryCode
                     cityname = address.get(0).adminArea
                     Log.e(TAG, "Address: $address")
                     Log.e(TAG, "City: $cityname")
-                    Log.e(TAG, "GetLasLoc Lat: $latitude Long: $longitude")
                     onLocation(taskLocation.result)
                 } else {
                     Log.w(TAG,"getLastLocation:exception", taskLocation.exception)
@@ -171,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             )){
-            Log.i(TAG,"Muestra explicacion rationale para proveer un contexto adicional de porque se requiere el permiso")
+            Log.i(TAG,"Muestra explicacion racional para proveer un contexto adicional de porque se requiere el permiso")
             showSnackbar(R.string.permission_rationale, android.R.string.ok)
             startLocationPermissionRequest()
         }else{
@@ -228,15 +210,13 @@ class MainActivity : AppCompatActivity() {
                 ivIcon3.load(iconHourlyUrl3)
                 tvTemp3.text = tempHourly3
             }
-            Log.e("JERL",weatherEntity.daily.toString())
             binding.recyclerClimaSemanal.layoutManager = LinearLayoutManager(this)
             binding.recyclerClimaSemanal.adapter = adaptador
             adaptador!!.notifyDataSetChanged()
             showIndicator(false)
 
         }catch(exception: Exception){
-            Log.e("JERL", exception.toString())
-            showError("Ha ocurrido un error")
+            utils.showMessage(this,R.string.ocurrio_error)
             showIndicator(false)
         }
     }
@@ -250,9 +230,8 @@ class MainActivity : AppCompatActivity() {
         Log.i(TAG,"onRequestPermissionsResult")
         if (requestCode == REQUEST_PERMISSIONS_REQUEST_CODE){
             when{
-                grantResults.isEmpty() -> Log.i(TAG, "La iteración del usuario fue cancelada.")
-                (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> getLastLocation (this::setupViewDAta)
-
+                grantResults.isEmpty() -> Log.i(TAG,R.string.iteracion_cancelada.toString())
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> (this::getWeather)
                 else -> {
                     showSnackbar(R.string.permission_denied_explanation, R.string.settings){
                         val intent = Intent().apply {
@@ -271,13 +250,9 @@ class MainActivity : AppCompatActivity() {
         binding.progressBarIndicator.isVisible = visible
     }
 
-    private fun showError(message:String){
-        Toast.makeText(this, message,Toast.LENGTH_LONG).show()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main,menu)
-        if(checkForInternet(this)) {
+        if(utils.checkForInternet(this)) {
             val item = menu?.findItem(R.id.update)
             item?.isVisible = false
         }
@@ -289,9 +264,10 @@ class MainActivity : AppCompatActivity() {
             R.id.update -> {
                 iniciarApp()
                 item.isVisible = false
-                Toast.makeText(this,"Refreshing...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Cargando...", Toast.LENGTH_SHORT).show()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 }
+

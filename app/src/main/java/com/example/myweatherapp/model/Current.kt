@@ -9,6 +9,5 @@ data class Current(
     val humidity: Int,
     val wind_speed: Double,
     val feels_like: Double,
-    val weather: List<Weather>,
-    val alerts: List<Alerts>
+    val weather: List<Weather>
 )

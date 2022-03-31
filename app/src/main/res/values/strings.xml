@@ -15,4 +15,8 @@
     <string name="semana">Semana</string>
     <string name="esta_semana">Esta semana:</string>
     <string name="regresar">Regresar</string>
+    <string name="iteracion_cancelada">La iteración del usuario fue cancelada.</string>
+    <string name="ocurrio_error">Ha ocurrido un error</string>
+    <string name="proximos_dias">Próximos Días:</string>
+    <string name="sin_internet">Sin acceso a internet</string>"
 </resources>
