@@ -1,34 +1,25 @@
 package com.example.myweatherapp.views
 
 import android.app.Activity
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.myweatherapp.R
 import com.example.myweatherapp.model.Daily
+import com.example.myweatherapp.util.Utils
 import java.text.SimpleDateFormat
 import java.util.*
 
 class WeatherAdapter(val weather: List<Daily>, val activity: Activity): RecyclerView.Adapter<WeatherAdapter.WeatherHolder>() {
+    val utils: Utils = Utils()
 
-    fun diaSemanaEspanol(diaSemanaIngles:String):String{
-        var diaSemanaEspanol: String = ""
-        when(diaSemanaIngles){
-            "Mon" -> diaSemanaEspanol = "Lun"
-            "Tue" -> diaSemanaEspanol = "Mar"
-            "Wed" -> diaSemanaEspanol = "Mie"
-            "Thu" -> diaSemanaEspanol = "Jue"
-            "Fri" -> diaSemanaEspanol = "Vie"
-            "Sat" -> diaSemanaEspanol = "Sab"
-            "Sun" -> diaSemanaEspanol = "Dom"
-        }
-        return diaSemanaEspanol
-    }
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -38,14 +29,19 @@ class WeatherAdapter(val weather: List<Daily>, val activity: Activity): Recycler
     }
 
     override fun onBindViewHolder(holder: WeatherAdapter.WeatherHolder, position: Int) {
-       val weather = weather.get(position)
+        val weather = weather.get(position)
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
 
         with(holder){
             val icon = weather.weather[0].icon
             val iconUrl = "https://openweathermap.org/img/w/$icon.png"
-            val diaSemanaIngles = SimpleDateFormat("E", Locale.forLanguageTag("es_MX")).format(weather.dt*1000)
-            val diaSemanaEspanol = diaSemanaEspanol(diaSemanaIngles)
-            tvDiaSemana.text = diaSemanaEspanol
+            val diaSemanaIngles = SimpleDateFormat("E", Locale.ENGLISH).format(weather.dt*1000)
+            if (!sharedPreferences.getBoolean("language",false)){
+                val diaSemanaEspanol = utils.diaSemanaEspanol(diaSemanaIngles)
+                tvDiaSemana.text = diaSemanaEspanol
+            }else{
+                tvDiaSemana.text = diaSemanaIngles
+            }
             tvtempMax.text = "${weather.temp.max.toInt()}º/"
             tvtempMin.text = "${weather.temp.min.toInt()}º"
             tvDesc.text = "${weather.weather[0].description.uppercase()}"

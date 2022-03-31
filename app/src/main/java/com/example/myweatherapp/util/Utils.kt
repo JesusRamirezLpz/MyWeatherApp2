@@ -14,6 +14,9 @@ import java.io.IOException
 
 class Utils {
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     fun checkForInternet(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -36,5 +39,25 @@ class Utils {
     fun showMessage(context: Context, message: Int) {
         Toast.makeText(context, context.getString(message), Toast.LENGTH_LONG).show()
     }
+
+    fun initSharedPreferences(context: Context) {
+        sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
+        editor = sharedPreferences.edit()
+    }
+
+    fun diaSemanaEspanol(diaSemanaIngles:String):String{
+        var diaSemanaEspanol = ""
+        when(diaSemanaIngles){
+            "Mon" -> diaSemanaEspanol = "Lun"
+            "Tue" -> diaSemanaEspanol = "Mar"
+            "Wed" -> diaSemanaEspanol = "Mie"
+            "Thu" -> diaSemanaEspanol = "Jue"
+            "Fri" -> diaSemanaEspanol = "Vie"
+            "Sat" -> diaSemanaEspanol = "Sab"
+            "Sun" -> diaSemanaEspanol = "Dom"
+        }
+        return diaSemanaEspanol
+    }
+
 
 }

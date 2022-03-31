@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.example.myweatherapp.BuildConfig.APPLICATION_ID
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     private var cityname:String =""
     private var country:String =""
     var adaptador: WeatherAdapter? = null
+    private var units = false
+    private var language = false
     val utils: Utils = Utils()
     val viewModel = MainViewModel()
 
@@ -61,9 +64,6 @@ class MainActivity : AppCompatActivity() {
                 requestPermissions()
             } else {
                 getWeather()
-                //getLastLocation() { location ->
-                    //setupViewDAta(location)
-                //}
             }
         }else{
             utils.showMessage(this,R.string.sin_internet)
@@ -83,19 +83,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sendData(lat: String, lon: String) {
+
         viewModel.getWeatherById(
             lat,
             lon,
-            "metric",
-            "sp",
+            getUnit(),
+            getLanguage(),
             "8ae5c025c39ad55772a706d4c481cb8d")
+    }
+
+    fun getUnit():String{
+        var unit = "metric"
+        if (units){
+            unit = "imperial"
+        }
+        return unit
+    }
+
+    fun getLanguage():String{
+        var languageCode = "es"
+
+        if(language){
+            languageCode = "en"
+        }
+        return languageCode
     }
 
     private fun initcomponets() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        getPreferences()
         observe()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //utils.initSharedPreferences(this)
+    }
+
+    fun getPreferences(){
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        units = sharedPreferences.getBoolean("units", false)
+        language = sharedPreferences.getBoolean("language",false)
     }
 
     fun observe(){
@@ -164,13 +190,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun formatResponse(weatherEntity: OneCallEntity){
         showIndicator(true)
+        var windSpeed = "Km/h"
+        if(units){
+            windSpeed= "mph"
+        }
         try {
             adaptador = WeatherAdapter(weatherEntity.daily, this)
             val icon = weatherEntity.current.weather[0].icon
             val iconUrl = "https://openweathermap.org/img/w/$icon.png"
             val status = weatherEntity.current.weather[0].description.uppercase()
-            val temp = "${weatherEntity.current.temp.toInt()}º"
-            val wind = "${weatherEntity.current.wind_speed} km/h"
+            val temp = "${weatherEntity.current.temp.toInt()} º"
+            val wind = "${weatherEntity.current.wind_speed} $windSpeed"
             val humidity = "${weatherEntity.current.humidity} %"
             val dt = weatherEntity.current.dt
             val currentDate: Long = dt
@@ -266,8 +296,18 @@ class MainActivity : AppCompatActivity() {
                 item.isVisible = false
                 Toast.makeText(this,"Cargando...", Toast.LENGTH_SHORT).show()
             }
+            R.id.settings-> {
+                val intent = Intent(this,SettingsActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        initcomponets()
+        iniciarApp()
+        super.onResume()
     }
 }
 

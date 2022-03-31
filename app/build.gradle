@@ -51,6 +51,8 @@ dependencies {
     implementation 'io.coil-kt:coil:1.4.0'
     //Google play Services (Ubicación del usuario)
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+    //preferences
+    implementation 'androidx.preference:preference:1.1.1'
 
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
     implementation 'androidx.core:core-ktx:1.7.0'

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/tituloPreferencias">
+
+        <SwitchPreferenceCompat
+            android:key="units"
+            android:summaryOff="Celcius"
+            android:summaryOn="Farenheit"
+            android:title="Unidad de temperatura">
+        </SwitchPreferenceCompat>
+
+        <SwitchPreferenceCompat
+            android:key="language"
+            android:summaryOff="Español"
+            android:summaryOn="English"
+            android:title="Idioma">
+
+        </SwitchPreferenceCompat>
+
+    </PreferenceCategory>
+</PreferenceScreen>
