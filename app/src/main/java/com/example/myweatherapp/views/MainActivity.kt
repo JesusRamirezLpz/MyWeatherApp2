@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivityError"
     private var cityname:String =""
     private var country:String =""
-    var adaptador: WeatherAdapter? = null
+    private var adaptador: WeatherAdapter? = null
     private var units = false
     private var language = false
     val utils: Utils = Utils()
@@ -113,9 +113,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getPreferences()
-        observe()
+        observers()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        //utils.initSharedPreferences(this)
     }
 
     fun getPreferences(){
@@ -124,11 +123,17 @@ class MainActivity : AppCompatActivity() {
         language = sharedPreferences.getBoolean("language",false)
     }
 
-    fun observe(){
-        viewModel.getWeather.observe(this, androidx.lifecycle.Observer { weather->
+    fun observers(){
+        viewModel.getWeather.observe(this, { weather->
             Log.e(TAG,weather.toString())
             formatResponse(weather)
             binding.detailsConstraintLayout.isVisible = true
+        })
+        viewModel.error.observe(this, { error->
+            Log.e(TAG, error.toString())
+            utils.showMessage(this,R.string.ocurrio_error)
+            showIndicator(true)
+            binding.detailsConstraintLayout.isVisible = false
         })
     }
 
@@ -188,6 +193,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun formatResponse(weatherEntity: OneCallEntity){
         showIndicator(true)
         var windSpeed = "Km/h"

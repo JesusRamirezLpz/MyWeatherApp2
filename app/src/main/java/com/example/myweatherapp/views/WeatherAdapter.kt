@@ -1,8 +1,6 @@
 package com.example.myweatherapp.views
 
 import android.app.Activity
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +21,12 @@ class WeatherAdapter(val weather: List<Daily>, val activity: Activity): Recycler
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): WeatherAdapter.WeatherHolder {
+    ): WeatherHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return WeatherHolder(layoutInflater.inflate(R.layout.daily_weather,parent,false))
     }
 
-    override fun onBindViewHolder(holder: WeatherAdapter.WeatherHolder, position: Int) {
+    override fun onBindViewHolder(holder: WeatherHolder, position: Int) {
         val weather = weather.get(position)
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
 
@@ -44,7 +42,7 @@ class WeatherAdapter(val weather: List<Daily>, val activity: Activity): Recycler
             }
             tvtempMax.text = "${weather.temp.max.toInt()}º/"
             tvtempMin.text = "${weather.temp.min.toInt()}º"
-            tvDesc.text = "${weather.weather[0].description.uppercase()}"
+            tvDesc.text = weather.weather[0].description.uppercase()
             ivIconSemana.load(iconUrl)
         }
     }

@@ -15,8 +15,7 @@ import java.io.IOException
 class MainViewModel: ViewModel(){
     val service: ServiceNetwork = ServiceNetwork()
     val getWeather = MutableLiveData<OneCallEntity>()
-    val badRequest = MutableLiveData<Boolean>()
-    val utils: Utils = Utils()
+    val error = MutableLiveData<Boolean>()
 
     fun getWeatherById(lat:String,lon:String,units:String,lang:String,appid:String){
       viewModelScope.launch {
@@ -28,7 +27,7 @@ class MainViewModel: ViewModel(){
                     Log.e("Success ", respuesta.body().toString())
                 }
             }catch(e: IOException){
-                utils
+                error.postValue(true)
                 Log.e("Response", e.toString())
             }
         }
