@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
             val icon = weatherEntity.current.weather[0].icon
             val iconUrl = "https://openweathermap.org/img/w/$icon.png"
             val status = weatherEntity.current.weather[0].description.uppercase()
-            val temp = "${weatherEntity.current.temp.toInt()} º"
+            val temp = "${weatherEntity.current.temp.toInt()}º"
             val wind = "${weatherEntity.current.wind_speed} $windSpeed"
             val humidity = "${weatherEntity.current.humidity} %"
             val dt = weatherEntity.current.dt
