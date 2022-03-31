@@ -289,8 +289,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main,menu)
         if(utils.checkForInternet(this)) {
-            val item = menu?.findItem(R.id.update)
-            item?.isVisible = false
+            val updateItem = menu?.findItem(R.id.update)
+            updateItem?.isVisible = false
         }
         return super.onCreateOptionsMenu(menu)
     }

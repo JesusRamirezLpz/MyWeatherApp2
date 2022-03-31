@@ -40,10 +40,6 @@ class Utils {
         Toast.makeText(context, context.getString(message), Toast.LENGTH_LONG).show()
     }
 
-    fun initSharedPreferences(context: Context) {
-        sharedPreferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(context)
-        editor = sharedPreferences.edit()
-    }
 
     fun diaSemanaEspanol(diaSemanaIngles:String):String{
         var diaSemanaEspanol = ""
